@@ -5,18 +5,14 @@ import {db} from "./data/db"
 export default function App() {
   const [guitars] = useState(db)
   const [cart, setCart] = useState([])
-  const max_items = 5
-  const total = cart.reduce ( (total, item) => total + (item.price * (item.quantity || 1)), 0)
+  const MAX_ITEMS = 5
   const addToCart = (guitar) => {
     const itemExists = cart.findIndex( item => item.id === guitar.id)
     
-    if(itemExists !== -1 ) {
-      const updatedCart = cart.map( item =>{
-        if(item.id === guitar.id && item.quantity < max_items){
-          return {...item, quantity: item.quantity + 1}
-        }
-        return item
-      })
+    if(itemExists >=0 ) {
+      if (cart[itemExists].quantity >= MAX_ITEMS) return 
+      const updatedCart = [...cart]
+      updatedCart[itemExists].quantity ++
       setCart(updatedCart)
     }else{
       guitar.quantity = 1
@@ -56,7 +52,7 @@ export default function App() {
   return (
     <>
 
-      <Header cart={cart} total={total} emptyCart={emptyCart} deleteItem={deleteItem} decrementItem={decrementItem} incrementItem={incrementItem} />
+      <Header cart={cart}  emptyCart={emptyCart} deleteItem={deleteItem} decrementItem={decrementItem} incrementItem={incrementItem} />
 
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
