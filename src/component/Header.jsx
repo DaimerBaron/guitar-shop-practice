@@ -1,6 +1,7 @@
 
 
-export default function Header() {
+export default function Header({cart, total=0, emptyCart, deleteItem, incrementItem, decrementItem}) {
+    const isCartEmtpy = cart.length === 0;
     return (
         <header className="py-5 header">
             <div className="container-xl">
@@ -17,7 +18,7 @@ export default function Header() {
                             <img className="img-fluid" src="./public/img/carrito.png" alt="imagen carrito" />
 
                             <div id="carrito" className="bg-white p-3">
-                                <p className="text-center">El carrito esta vacio</p>
+                                {isCartEmtpy && <p className="text-center">No hay productos en el carrito</p>}
                                 <table className="w-100 table">
                                     <thead>
                                         <tr>
@@ -29,25 +30,28 @@ export default function Header() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                       {cart.map((item) =>(
+                                         <tr key={item.id}>
                                             <td>
-                                                <img className="img-fluid" src="./public/img/guitarra_02.jpg" alt="imagen guitarra" />
+                                                <img className="img-fluid" src={`./public/img/${item.image}.jpg`} alt={`imagen guitarra ${item.id}`} />
                                             </td>
-                                            <td>SRV</td>
+                                            <td>{item.name}</td>
                                             <td className="fw-bold">
-                                                $299
+                                                ${item.price}
                                             </td>
                                             <td className="flex align-items-start gap-4">
                                                 <button
                                                     type="button"
                                                     className="btn btn-dark"
+                                                    onClick={() => decrementItem(item.id)}
                                                 >
                                                     -
                                                 </button>
-                                                1
+                                                <span className="fs-2">{item.quantity || 1}</span>
                                                 <button
                                                     type="button"
                                                     className="btn btn-dark"
+                                                    onClick={() => incrementItem(item.id)}
                                                 >
                                                     +
                                                 </button>
@@ -56,16 +60,18 @@ export default function Header() {
                                                 <button
                                                     className="btn btn-danger"
                                                     type="button"
+                                                    onClick={() => deleteItem(item.id)}
                                                 >
                                                     X
                                                 </button>
                                             </td>
                                         </tr>
+                                       ))}
                                     </tbody>
                                 </table>
+                                <p className="text-end">Total pagar: <span className="fw-bold">${total}</span></p>
 
-                                <p className="text-end">Total pagar: <span className="fw-bold">$899</span></p>
-                                <button className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
+                                <button onClick={emptyCart} className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
                             </div>
                         </div>
                     </nav>
