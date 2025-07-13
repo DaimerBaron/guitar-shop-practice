@@ -1,11 +1,16 @@
 import Guitar from "./component/Guitar";
 import Header from "./component/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "./data/db";
 export default function App() {
+  const initialCart = () => {
+    const getItems = JSON.parse(localStorage.getItem("cart"));
+    return getItems ? getItems : [];
+  };
   const [guitars] = useState(db);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(initialCart);
   const MAX_ITEMS = 5;
+  
   const addToCart = (guitar) => {
     const itemExists = cart.findIndex((item) => item.id === guitar.id);
 
@@ -20,6 +25,10 @@ export default function App() {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const deleteItem = (id) => {
     const updatedCart = cart.filter((item) => item.id !== id);
     setCart(updatedCart);
@@ -31,7 +40,7 @@ export default function App() {
 
   const incrementItem = (id) => {
     const updatedCart = cart.map((prevCart) => {
-      if (prevCart.id === id && prevCart.quantity <  MAX_ITEMS) {
+      if (prevCart.id === id && prevCart.quantity < MAX_ITEMS) {
         return { ...prevCart, quantity: prevCart.quantity + 1 };
       }
       return prevCart;
