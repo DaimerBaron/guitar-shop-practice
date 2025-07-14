@@ -1,6 +1,6 @@
 export default function Header({
   cart,
-  emptyCart,
+  clearCart,
   deleteItem,
   incrementItem,
   decrementItem,
@@ -93,7 +93,7 @@ export default function Header({
                 </p>
 
                 <button
-                  onClick={emptyCart}
+                  onClick={clearCart}
                   className="btn btn-dark w-100 mt-3 p-2"
                 >
                   Vaciar Carrito
