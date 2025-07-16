@@ -1,10 +1,19 @@
+import type { Guitar, CartItem } from '../types/guitar';
+
+type HeaderProps = {
+  cart: CartItem[];
+  clearCart: () => void;
+  deleteItem: (id: Guitar['id']) => void;
+  incrementItem: (id: Guitar['id']) => void;
+  decrementItem: (id: Guitar['id']) => void;
+};
 export default function Header({
   cart,
   clearCart,
   deleteItem,
   incrementItem,
   decrementItem,
-}) {
+}: HeaderProps) {
   const isCartEmtpy = cart.length === 0;
   const total = cart.reduce(
     (total, item) => total + item.price * (item.quantity || 1),
